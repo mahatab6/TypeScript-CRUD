@@ -2,10 +2,10 @@ import React, { useEffect } from 'react'
 import { store } from '../../app/store'
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchProduct } from './todoSlice';
+import { deleteProduct, fetchProduct } from './todoSlice';
 
 type items = {
-    id: string;
+    id: string | number;
     name:string;
     price: number;
     category: string;
@@ -33,6 +33,10 @@ export default function TodoView() {
                             <h1>{item.name}</h1>
                             <p>{item.price}</p>
                             <p>{item.category}</p>
+                            <div>
+                                <button onClick={() => dispatch(deleteProduct(item.id))}>Delete</button>
+                                <button>Edit</button>
+                            </div>
                         </div>
                     )
                 })

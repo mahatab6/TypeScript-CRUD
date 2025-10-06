@@ -29,6 +29,15 @@ export const fetchProduct = createAsyncThunk(
     }
 );
 
+export const deleteProduct = createAsyncThunk(
+    "product/deleteProduct",
+    async (id: number | string) => {
+        const res = await axios.delete(`http://localhost:3000/products/${id}`)
+        return id;
+    }
+)
+
+
 export const todoSlice = createSlice({
     name: 'todos',
     initialState,
@@ -45,6 +54,9 @@ export const todoSlice = createSlice({
             })
             .addCase(fetchProduct.rejected, (state, action) =>{
                 state.error = action.error.message
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.todos = state.todos.filter((todo) => todo.id !== action.payload);
             })
 
          
