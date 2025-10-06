@@ -1,11 +1,12 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { error } from "console";
 
 
 type todo = {
-    id: number;
+    id: number | string;
     name: string;
+    productName: string;
 }
 
 type TodoState = {
@@ -37,6 +38,14 @@ export const deleteProduct = createAsyncThunk(
     }
 )
 
+export const createProduct = createAsyncThunk<todo, todo>(
+  "product/createProduct",
+  async (newProduct) => {
+    const res = await axios.post("http://localhost:3000/products", newProduct);
+    return res.data;
+  }
+);
+
 
 export const todoSlice = createSlice({
     name: 'todos',
@@ -58,6 +67,9 @@ export const todoSlice = createSlice({
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.todos = state.todos.filter((todo) => todo.id !== action.payload);
             })
+            .addCase(createProduct.fulfilled, (state, action: PayloadAction<todo>) => {
+                state.todos.push(action.payload)
+            } )
 
          
     },

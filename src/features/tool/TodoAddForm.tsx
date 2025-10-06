@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useAppDispatch } from "../../app/hooks";
+import { createProduct } from "./todoSlice";
 
 type formData = {
   name: string;
@@ -8,19 +10,25 @@ type formData = {
 };
 
 type todo = {
-  id: string;
+  id: string | number;
   name: string;
   productName: string;
 };
 
+
+
 export default function TodoAddForm() {
   const { register, handleSubmit } = useForm<formData>();
+  const dispatch = useAppDispatch();
+
   const onSubmit: SubmitHandler<formData> = (data) => {
     const fulldata: todo = {
       ...data,
       id: nanoid(),
     };
-    console.log(fulldata);
+
+    dispatch(createProduct(fulldata))
+
   };
 
   return (
